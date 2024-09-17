@@ -9,6 +9,7 @@ const NotFoundError = require("./middlewares/errors/NotFoundError");
 dotenv.config();
 const  auth  = require("./middlewares/auth");
 const { createUser, login } = require("./controllers/users");
+const { getCards } = require("./controllers/cards");
 
 const { PORT = 3001, BASE_PATH } = process.env;
 const app = express();
@@ -86,7 +87,7 @@ app.post(
   }),
   createUser
 );
-
+app.get("/usercard", getCards);
 
 app.use(auth);
 

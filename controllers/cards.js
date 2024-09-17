@@ -83,6 +83,12 @@ module.exports.createCard = (req, res, next) => {
   if ([name, articul, height, width,difficulty,colors,contours,linkconture,linkfull].some(field => field == null)) {
     return next(new BadRequest(`Поля не указано`));
   }
+  cardsData.findOne({ articul })
+  .then((card) => {
+    if (card) {
+      return next(new Conflict("карточка уже создана"));
+    }
+
 
   cardsData.create({ name, articul, height, width,difficulty,colors,contours,linkconture,linkfull})
     .then((card) => {
@@ -90,6 +96,7 @@ module.exports.createCard = (req, res, next) => {
         return res.status(201).send({ data: card });
       }
     })
+  })
     .catch((err) => {
       if (err.name === "ValidationError") {
         return next(new BadRequest("Переданы некорректные данные при создании карточки."));
